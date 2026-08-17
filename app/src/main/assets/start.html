@@ -2,28 +2,141 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#090a0e">
 <title>Pioneer Remote</title>
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 20% 10%,#30102b 0,#0d0d12 42%,#08080b 100%);color:#fff;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;padding:22px}.card{width:min(430px,100%);background:rgba(17,18,24,.96);border:1px solid #2b2c36;border-radius:28px;padding:26px;box-shadow:0 30px 90px #0009}.logo{font-size:34px;font-weight:800;font-style:italic;text-align:center}.sub{text-align:center;color:#a9abb8;margin:8px 0 26px}.step{background:#12131a;border:1px solid #272833;border-radius:18px;padding:14px 16px;margin:12px 0;line-height:1.35}.n{display:inline-grid;place-items:center;width:26px;height:26px;background:#ff0a5c;border-radius:50%;font-weight:800;margin-right:8px}.or{text-align:center;color:#777a87;margin:18px 0 10px;font-size:13px}label{font-size:12px;color:#b8bac6;display:block;margin:12px 0 7px 3px}input{width:100%;border:1px solid #343640;background:#090a0f;color:white;border-radius:14px;padding:15px;font-size:16px;outline:none}input:focus{border-color:#ff0a5c}button{width:100%;border:0;border-radius:14px;padding:15px;background:#ff0a5c;color:#fff;font-weight:800;font-size:15px;margin-top:14px}.hint{font-size:12px;color:#7f818e;text-align:center;margin-top:14px}.badge{display:table;background:#2a1022;color:#ff6ea4;border:1px solid #5d173a;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700;margin:0 auto 14px}
+:root{--pink:#ff0a5c;--bg:#08090d;--card:#12131a;--line:#292b36;--muted:#9295a3}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 25% 0,#35112b 0,#0a0a0f 38%,#07080b 100%);color:#fff;font-family:Arial,sans-serif;min-height:100vh}.wrap{max-width:520px;margin:auto;padding:20px 16px 100px}.brand{display:flex;align-items:center;justify-content:space-between;margin:4px 0 18px}.logo{font-size:30px;font-weight:900;font-style:italic;letter-spacing:-1.5px}.badge,.chip{font-size:11px;font-weight:800;border:1px solid #3b3d49;border-radius:999px;padding:7px 10px;background:#161820;color:#cfd1da}.chip.on{border-color:#174a2b;color:#6aff9c;background:#0c2516}.chip.off{border-color:#5a2031;color:#ff6b9d;background:#2c0d18}.card{background:rgba(18,19,26,.94);border:1px solid var(--line);border-radius:22px;padding:18px;margin:13px 0;box-shadow:0 20px 60px #0005}h1,h2,h3,p{margin-top:0}h1{font-size:27px;margin-bottom:8px}h2{font-size:18px;margin-bottom:12px}.muted{color:var(--muted);font-size:13px;line-height:1.45}.hero{text-align:center;padding:26px 18px}.orb{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;background:radial-gradient(circle at 35% 30%,#ff5b9a,var(--pink) 45%,#53001e 100%);font-size:32px;box-shadow:0 0 40px #ff0a5c55}.code{font-size:31px;letter-spacing:8px;font-weight:900;color:#ff5b96;margin:8px 0 16px}input,button{font:inherit}input[type=text],input[type=url],input[type=number]{width:100%;background:#090a0f;border:1px solid #343744;border-radius:14px;padding:14px;color:#fff;outline:none;margin:6px 0 12px}input:focus{border-color:var(--pink)}button{border:0;border-radius:14px;padding:14px 12px;background:#22242e;color:#fff;font-weight:800}button.primary{width:100%;background:var(--pink)}button.danger{width:100%;background:#32101b;color:#ff7aa8;border:1px solid #5a1831}.row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.controls button{min-height:48px}.controls button.active{background:var(--pink)}label.small{display:block;color:#afb2bd;font-size:12px;font-weight:700;margin-top:10px}input[type=range]{width:100%;accent-color:var(--pink)}.rangehead{display:flex;justify-content:space-between;margin:12px 0 5px;color:#d5d7df}.colors{display:grid;grid-template-columns:1fr 1fr;gap:12px}.colors input{width:100%;height:48px;border:0;background:transparent}.now{display:flex;justify-content:space-between;gap:12px;align-items:center}.song{min-width:0}.song b,.song span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.song span{color:var(--muted);font-size:13px;margin-top:5px}.tabs{position:fixed;left:0;right:0;bottom:0;background:#0b0c11eF;backdrop-filter:blur(12px);border-top:1px solid #252732;display:grid;grid-template-columns:repeat(4,1fr);z-index:5}.tabs button{border-radius:0;background:transparent;padding:15px 5px 18px;color:#858896;font-size:12px}.tabs button.active{color:#fff}.tabs button.active:before{content:'';display:block;width:26px;height:3px;border-radius:3px;background:var(--pink);margin:-8px auto 8px}.tab{display:none}.tab.active{display:block}.info{display:grid;grid-template-columns:1fr auto;gap:12px;padding:9px 0;border-bottom:1px solid #252732}.info:last-child{border:0}.info span{color:var(--muted)}.hidden{display:none!important}.toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#191b23;border:1px solid #383a46;border-radius:999px;padding:11px 16px;font-size:13px;transition:.2s;z-index:20;max-width:90%;text-align:center}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.internet{color:#63ff9d;font-weight:800}.hint{font-size:12px;color:#7e818f;text-align:center;margin:14px 0 0}.statusdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff3f72;margin-right:6px}.statusdot.on{background:#38ef7d;box-shadow:0 0 12px #38ef7d88}
 </style>
 </head>
 <body>
-<div class="card">
-<div class="badge">PIONEER ANDROID</div>
-<div class="logo">Pioneer</div>
-<div class="sub">Controle do som pelo celular real</div>
-<div class="step"><span class="n">1</span>No jogo abra <b>F7 → Bluetooth</b>.</div>
-<div class="step"><span class="n">2</span>Toque em <b>Gerar novo código</b>.</div>
-<div class="step"><span class="n">3</span>Escaneie o QR. O app abre e conecta sozinho.</div>
-<div class="or">OU CONECTE MANUALMENTE</div>
-<label>IP do PC</label><input id="host" inputmode="decimal" placeholder="Ex.: 192.168.1.10">
-<label>Código de 6 dígitos</label><input id="code" inputmode="numeric" maxlength="6" placeholder="000000">
-<button onclick="go()">CONECTAR AO PIONEER</button>
-<div class="hint">PC e celular precisam estar na mesma rede Wi-Fi durante o teste.</div>
+<div id="toast" class="toast"></div>
+<div class="wrap">
+  <div class="brand"><div class="logo">Pioneer</div><div id="connChip" class="chip off">SEM CONEXÃO</div></div>
+
+  <section id="pairScreen">
+    <div class="card hero">
+      <div class="orb">ᛒ</div>
+      <h1>Conectar à Pioneer</h1>
+      <p class="muted">Escaneie o QR da aba Bluetooth. O app conecta pela <span class="internet">Internet</span>, então o celular pode estar no 4G/5G ou em outro Wi‑Fi.</p>
+      <div id="pairCodeView" class="code">------</div>
+      <button id="scanBtn" class="primary">📷 ESCANEAR QR DO PIONEER</button>
+      <div style="height:8px"></div>
+      <input id="manualCode" inputmode="numeric" maxlength="6" placeholder="Código de 6 dígitos (opcional)">
+      <button id="pairBtn">CONECTAR COM O CÓDIGO</button>
+      <p class="hint">Não precisa digitar IP, abrir porta ou estar na mesma rede do PC.</p>
+    </div>
+  </section>
+
+  <section id="appScreen" class="hidden">
+    <div class="card now"><div class="song"><b id="songTitle">Sem música</b><span id="songArtist">Pioneer Remote</span></div><div id="onlineText" class="badge"><span class="statusdot"></span>MTA</div></div>
+
+    <section id="tab-player" class="tab active">
+      <div class="card"><h2>Player</h2><label class="small">URL DA MÚSICA / YOUTUBE</label><div class="row"><input id="musicUrl" type="url" placeholder="https://..."><button id="playBtn">▶</button></div><button id="stopBtn" class="danger">■ PARAR</button></div>
+      <div class="card"><div class="rangehead"><span>Volume</span><b id="volText">70%</b></div><input id="volume" type="range" min="0" max="100" value="70"><div class="rangehead"><span>Distância</span><b id="distText">80 m</b></div><input id="distance" type="range" min="10" max="100" value="80"></div>
+    </section>
+
+    <section id="tab-light" class="tab">
+      <div class="card"><h2>Iluminação RGB / STRO4</h2><div class="colors"><div><label class="small">COR 1</label><input id="color1" type="color" value="#ff145c"></div><div><label class="small">COR 2</label><input id="color2" type="color" value="#00aeff"></div></div><label class="small">MODO</label><div class="grid2 controls"><button data-mode="fixed" class="active">FIXO</button><button data-mode="rainbow">RGB</button><button data-mode="music">ÁUDIO</button><button data-mode="stro4">STRO4</button></div><div class="rangehead"><span>Brilho</span><b id="brightText">100%</b></div><input id="brightness" type="range" min="0" max="100" value="100"><div class="rangehead"><span>Velocidade</span><b id="speedText">1.0x</b></div><input id="speed" type="range" min="25" max="400" value="100"></div>
+    </section>
+
+    <section id="tab-car" class="tab">
+      <div class="card"><h2>Controle do carro</h2><div class="grid2 controls"><button data-action="hood">CAPÔ</button><button data-action="trunk">MALA</button><button data-action="frontLeft">PORTA D.E.</button><button data-action="frontRight">PORTA D.D.</button><button data-action="rearLeft">PORTA T.E.</button><button data-action="rearRight">PORTA T.D.</button><button data-action="lock">TRAVA</button><button data-action="engine">MOTOR</button></div><button data-action="lights" style="width:100%;margin-top:10px">FARÓIS</button></div>
+    </section>
+
+    <section id="tab-system" class="tab">
+      <div class="card"><h2>Sistema</h2><div class="info"><span>Conexão</span><b id="connectionMode">Internet</b></div><div class="info"><span>Jogador</span><b id="playerName">-</b></div><div class="info"><span>Veículo</span><b id="vehicleModel">-</b></div><div class="info"><span>Rede do celular</span><b>Qualquer Wi‑Fi / 4G / 5G</b></div></div><button id="disconnectBtn" class="danger">DESCONECTAR CELULAR</button>
+    </section>
+  </section>
 </div>
+<nav id="tabs" class="tabs hidden"><button data-tab="player" class="active">INÍCIO</button><button data-tab="light">LUZES</button><button data-tab="car">CARRO</button><button data-tab="system">SISTEMA</button></nav>
 <script>
-function go(){var h=document.getElementById('host').value.trim().replace(/^https?:\/\//,'').replace(/\/$/,'');var c=document.getElementById('code').value.replace(/\D/g,'').slice(0,6);if(!h){alert('Digite o IP do PC.');return}if(!/:\d+$/.test(h))h+=':8787';if(c.length!==6){alert('Digite o código de 6 dígitos.');return}location.href='http://'+h+'/?code='+encodeURIComponent(c)+'&autoconnect=1'}
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const TE=new TextEncoder(), TD=new TextDecoder();
+function cat(...parts){const len=parts.reduce((n,p)=>n+p.length,0),o=new Uint8Array(len);let at=0;for(const p of parts){o.set(p,at);at+=p.length}return o}
+function mstr(s){const b=TE.encode(String(s)),h=new Uint8Array(2);h[0]=(b.length>>8)&255;h[1]=b.length&255;return cat(h,b)}
+function mrem(n){const a=[];do{let d=n%128;n=Math.floor(n/128);if(n>0)d|=128;a.push(d)}while(n>0);return new Uint8Array(a)}
+function mpkt(h,b){return cat(new Uint8Array([h]),mrem(b.length),b)}
+class MiniMqtt{
+  constructor(url){this.url=url;this.ws=null;this.rx=new Uint8Array(0);this.online=false;this.closed=false;this.pid=1;this.subs=new Set();this.reconnectTimer=null;this.pingTimer=null;this.onStatus=()=>{};this.onMessage=()=>{}}
+  status(v){if(this.online===v)return;this.online=v;try{this.onStatus(v)}catch{}}
+  nextId(){this.pid=(this.pid%65535)+1;return this.pid}
+  connect(){if(this.closed)return;clearTimeout(this.reconnectTimer);try{const w=new WebSocket(this.url,['mqtt']);this.ws=w;w.binaryType='arraybuffer';w.onopen=()=>this.sendConnect();w.onmessage=e=>this.feed(new Uint8Array(e.data));w.onerror=()=>{};w.onclose=()=>{this.status(false);clearInterval(this.pingTimer);this.reconnectTimer=setTimeout(()=>this.connect(),1500)}}catch{this.status(false);this.reconnectTimer=setTimeout(()=>this.connect(),1800)}}
+  send(b){try{if(this.ws&&this.ws.readyState===1){this.ws.send(b);return true}}catch{}return false}
+  sendConnect(){const vh=cat(mstr('MQTT'),new Uint8Array([4,2,0,30])),payload=mstr('pioneer_android_'+Math.random().toString(16).slice(2));this.send(mpkt(0x10,cat(vh,payload)))}
+  subscribe(t){if(!t)return;this.subs.add(t);if(this.online)this._sub(t)}
+  _sub(t){const id=this.nextId(),ph=new Uint8Array([(id>>8)&255,id&255]);this.send(mpkt(0x82,cat(ph,mstr(t),new Uint8Array([0]))))}
+  publish(t,p){if(!this.online)return false;return this.send(mpkt(0x30,cat(mstr(t),TE.encode(String(p))))}
+  feed(b){this.rx=cat(this.rx,b);while(this.rx.length>=2){const h=this.rx[0];let mul=1,rem=0,i=1,d;do{if(i>=this.rx.length)return;d=this.rx[i++];rem+=(d&127)*mul;mul*=128;if(mul>268435456)return}while(d&128);if(this.rx.length<i+rem)return;const body=this.rx.slice(i,i+rem);this.rx=this.rx.slice(i+rem);this.handle(h,body)}}
+  handle(h,b){const type=h>>4;if(type===2){if(b.length>=2&&b[1]===0){this.status(true);for(const t of [...this.subs])this._sub(t);clearInterval(this.pingTimer);this.pingTimer=setInterval(()=>{if(this.online)this.send(new Uint8Array([0xC0,0]))},20000)}else{try{this.ws.close()}catch{}}return}if(type===3){if(b.length<2)return;const tl=(b[0]<<8)|b[1];if(b.length<2+tl)return;const topic=TD.decode(b.slice(2,2+tl));let pos=2+tl,qos=(h>>1)&3;if(qos>0)pos+=2;const payload=TD.decode(b.slice(pos));try{this.onMessage(topic,payload)}catch{}}}
+  close(){this.closed=true;this.status(false);clearTimeout(this.reconnectTimer);clearInterval(this.pingTimer);try{this.ws&&this.ws.close()}catch{}}
+}
+
+const params=new URLSearchParams(location.hash.replace(/^#/,''));
+let broker=params.get('broker')||localStorage.getItem('pioneerBroker')||'wss://broker.emqx.io:8084/mqtt';
+let channel=params.get('channel')||localStorage.getItem('pioneerChannel')||'';
+let code=(params.get('code')||'').replace(/\D/g,'').slice(0,6);
+let token=localStorage.getItem('pioneerInternetToken')||'';
+let client=null,mqttReady=false,lastStateAt=0,pairTimer=null,pairTries=0;
+let lighting={enabled:true,mode:'fixed',r:255,g:20,b:92,r2:0,g2:174,b2:255,brightness:1,speed:1,audioReactive:false};
+const toBridge=()=>`pioneer/v2/${channel}/to-bridge`,toPhone=()=>`pioneer/v2/${channel}/to-phone`;
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),2600)}
+function rid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,10)}
+function showPair(){$('#pairScreen').classList.remove('hidden');$('#appScreen').classList.add('hidden');$('#tabs').classList.add('hidden')}
+function showApp(){$('#pairScreen').classList.add('hidden');$('#appScreen').classList.remove('hidden');$('#tabs').classList.remove('hidden')}
+function setConn(ok){mqttReady=ok;const c=$('#connChip');c.className='chip '+(ok?'on':'off');c.textContent=ok?'INTERNET OK':'SEM CONEXÃO'}
+function hex(h){h=h.replace('#','');return{r:parseInt(h.slice(0,2),16),g:parseInt(h.slice(2,4),16),b:parseInt(h.slice(4,6),16)}}
+function rgb(r,g,b){return'#'+[r,g,b].map(v=>Math.max(0,Math.min(255,Number(v)||0)).toString(16).padStart(2,'0')).join('')}
+function publish(obj){if(!client||!mqttReady){toast('Aguardando conexão com a Internet.');return false}return client.publish(toBridge(),JSON.stringify(obj))}
+function connectMqtt(){
+  if(!channel){showPair();setConn(false);return}
+  localStorage.setItem('pioneerBroker',broker);localStorage.setItem('pioneerChannel',channel);
+  if(client)client.close();client=new MiniMqtt(broker);
+  client.onStatus=ok=>{setConn(ok);if(ok){client.subscribe(toPhone());if(code&&params.get('autoconnect')==='1')setTimeout(pair,280);else if(token)showApp()}};
+  client.onMessage=(topic,payload)=>{if(topic!==toPhone())return;let m;try{m=JSON.parse(payload)}catch{return}handleMessage(m)};
+  client.connect();
+}
+function handleMessage(m){
+  if(m.type==='pair_result'){
+    clearInterval(pairTimer);pairTimer=null;const b=$('#pairBtn');b.disabled=false;b.textContent='CONECTAR COM O CÓDIGO';
+    if(!m.ok)return toast(m.error||'Não foi possível conectar.');
+    token=m.token||'';localStorage.setItem('pioneerInternetToken',token);showApp();render({online:true,playerName:m.playerName,vehicleModel:m.vehicleModel,state:m.state,deviceName:m.deviceName});toast('Pioneer conectado pela Internet!');return;
+  }
+  if(m.type==='state'&&m.token===token){lastStateAt=Date.now();render(m);return}
+  if(m.type==='command_result'&&m.ok===false&&m.error==='not_paired'){token='';localStorage.removeItem('pioneerInternetToken');showPair();toast('Pareamento expirou. Gere outro QR.')}
+  if(m.type==='pong'&&m.ok===false&&token){token='';localStorage.removeItem('pioneerInternetToken');showPair()}
+}
+function pair(){
+  if(!channel)return toast('Escaneie o QR do Pioneer primeiro.');
+  if(!mqttReady)return toast('Aguardando conexão com a Internet.');
+  code=(code||$('#manualCode').value||'').replace(/\D/g,'').slice(0,6);if(code.length!==6)return toast('Escaneie o QR ou digite os 6 números.');
+  $('#pairCodeView').textContent=code;const b=$('#pairBtn');b.disabled=true;b.textContent='CONECTANDO...';
+  clearInterval(pairTimer);pairTries=0;
+  const sendPair=()=>{pairTries++;publish({type:'pair',requestId:rid(),code,deviceName:'Android'});if(pairTries>=4){clearInterval(pairTimer);pairTimer=null;setTimeout(()=>{if(b.disabled){b.disabled=false;b.textContent='CONECTAR COM O CÓDIGO';toast('Sem resposta. Gere outro QR e tente novamente.')}},900)}};
+  sendPair();pairTimer=setInterval(sendPair,1700);
+}
+function command(command,payload={}){if(!token)return toast('Conecte pelo QR primeiro.');publish({type:'command',requestId:rid(),token,command,payload})}
+function render(j){
+  lastStateAt=Date.now();$('#playerName').textContent=j.playerName||'-';$('#vehicleModel').textContent=j.vehicleModel?('Modelo '+j.vehicleModel):'-';
+  const online=j.online!==false,o=$('#onlineText');o.innerHTML='<span class="statusdot '+(online?'on':'')+'"></span>'+(online?'MTA ONLINE':'MTA OFFLINE');
+  const s=j.state||{},r=s.radio||{};$('#songTitle').textContent=r.title||'Sem música';$('#songArtist').textContent=r.artist||'Pioneer Remote';
+  if(Number.isFinite(Number(r.volume))){const v=Math.round(Number(r.volume)*100);$('#volume').value=v;$('#volText').textContent=v+'%'}
+  if(Number.isFinite(Number(r.distance))){const d=Math.round(Number(r.distance));$('#distance').value=d;$('#distText').textContent=d+' m'}
+  const l=s.lighting||{};if(Object.keys(l).length){lighting={...lighting,...l};$('#color1').value=rgb(l.r,l.g,l.b);$('#color2').value=rgb(l.r2,l.g2,l.b2);$('#brightness').value=Math.round((Number(l.brightness)||1)*100);$('#brightText').textContent=$('#brightness').value+'%';$('#speed').value=Math.round((Number(l.speed)||1)*100);$('#speedText').textContent=(Number($('#speed').value)/100).toFixed(1)+'x';$$('[data-mode]').forEach(x=>x.classList.toggle('active',x.dataset.mode===l.mode))}
+}
+function sendLighting(){const a=hex($('#color1').value),b=hex($('#color2').value);lighting={...lighting,...a,r2:b.r,g2:b.g,b2:b.b,brightness:Number($('#brightness').value)/100,speed:Number($('#speed').value)/100};command('lighting',lighting)}
+function deb(fn,k,ms=100){clearTimeout(window[k]);window[k]=setTimeout(fn,ms)}
+$('#scanBtn').onclick=()=>{if(window.Android&&Android.scanQr){Android.scanQr()}else toast('Use a câmera do celular para escanear o QR.')};
+$('#pairBtn').onclick=pair;$('#manualCode').oninput=e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,6);code=e.target.value;$('#pairCodeView').textContent=code||'------'};
+$('#playBtn').onclick=()=>{const url=$('#musicUrl').value.trim();if(!/^https?:\/\//i.test(url))return toast('Cole uma URL válida.');command('play_url',{url,distance:Number($('#distance').value),title:'Música pelo celular',artist:'Pioneer Remote'})};$('#stopBtn').onclick=()=>command('stop');
+$('#volume').oninput=e=>{$('#volText').textContent=e.target.value+'%';deb(()=>command('volume',{value:Number(e.target.value)/100}),'v',90)};$('#distance').oninput=e=>{$('#distText').textContent=e.target.value+' m';deb(()=>command('distance',{value:Number(e.target.value)}),'d',120)};
+$$('[data-mode]').forEach(b=>b.onclick=()=>{lighting.mode=b.dataset.mode;$$('[data-mode]').forEach(x=>x.classList.toggle('active',x===b));sendLighting()});['color1','color2'].forEach(id=>$('#'+id).oninput=()=>deb(sendLighting,'l',90));$('#brightness').oninput=e=>{$('#brightText').textContent=e.target.value+'%';deb(sendLighting,'l',90)};$('#speed').oninput=e=>{$('#speedText').textContent=(Number(e.target.value)/100).toFixed(1)+'x';deb(sendLighting,'l',90)};
+$$('[data-action]').forEach(b=>b.onclick=()=>command('vehicle_action',{action:b.dataset.action}));
+$$('#tabs [data-tab]').forEach(b=>b.onclick=()=>{$$('#tabs button').forEach(x=>x.classList.toggle('active',x===b));$$('.tab').forEach(t=>t.classList.toggle('active',t.id==='tab-'+b.dataset.tab))});
+$('#disconnectBtn').onclick=()=>{if(token)publish({type:'disconnect',requestId:rid(),token});token='';code='';localStorage.removeItem('pioneerInternetToken');showPair();toast('Celular desconectado.')};
+if(code){$('#manualCode').value=code;$('#pairCodeView').textContent=code}else $('#pairCodeView').textContent='------';
+if(channel)connectMqtt();else showPair();
+setInterval(()=>{if(token&&mqttReady&&Date.now()-lastStateAt>4500)publish({type:'ping',requestId:rid(),token})},3000);
 </script>
 </body>
 </html>
