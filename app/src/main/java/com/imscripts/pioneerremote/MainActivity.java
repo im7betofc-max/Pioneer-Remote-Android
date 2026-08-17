@@ -2,7 +2,6 @@ package com.imscripts.pioneerremote;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,92 +12,75 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
     private WebView webView;
-    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setStatusBarColor(Color.rgb(11, 11, 15));
-        getWindow().setNavigationBarColor(Color.rgb(11, 11, 15));
+        getWindow().setStatusBarColor(Color.rgb(9, 10, 14));
+        getWindow().setNavigationBarColor(Color.rgb(9, 10, 14));
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        prefs = getSharedPreferences("pioneer", MODE_PRIVATE);
         webView = new WebView(this);
-        webView.setBackgroundColor(Color.rgb(8, 8, 11));
+        webView.setBackgroundColor(Color.rgb(8, 9, 13));
         setContentView(webView);
 
-        WebSettings settings = webView.getSettings();
-        settings.setJavaScriptEnabled(true);
-        settings.setDomStorageEnabled(true);
-        settings.setDatabaseEnabled(true);
-        settings.setMediaPlaybackRequiresUserGesture(false);
-        settings.setBuiltInZoomControls(false);
-        settings.setDisplayZoomControls(false);
-        settings.setLoadWithOverviewMode(true);
-        settings.setUseWideViewPort(true);
-        settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        WebSettings s = webView.getSettings();
+        s.setJavaScriptEnabled(true);
+        s.setDomStorageEnabled(true);
+        s.setDatabaseEnabled(true);
+        s.setMediaPlaybackRequiresUserGesture(false);
+        s.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        s.setAllowFileAccess(true);
+        s.setAllowContentAccess(true);
 
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
         hideSystemBars();
-        handleIntent(getIntent(), true);
+        handleIntent(getIntent());
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        handleIntent(intent, false);
+        handleIntent(intent);
     }
 
-    private void handleIntent(Intent intent, boolean allowLastServer) {
+    private void handleIntent(Intent intent) {
         Uri data = intent != null ? intent.getData() : null;
         if (data != null && "pioneer".equalsIgnoreCase(data.getScheme()) && "pair".equalsIgnoreCase(data.getHost())) {
-            String server = data.getQueryParameter("server");
-            String code = data.getQueryParameter("code");
-            if (server != null && code != null && code.matches("\\d{6}")) {
-                openPair(server, code);
+            String mode = safe(data.getQueryParameter("mode"));
+            String broker = safe(data.getQueryParameter("broker"));
+            String room = safe(data.getQueryParameter("room"));
+            String access = safe(data.getQueryParameter("access"));
+            String code = safe(data.getQueryParameter("code"));
+            if ("internet".equalsIgnoreCase(mode) && code.matches("\\d{6}") && !room.isEmpty() && !access.isEmpty()) {
+                String hash = "mode=internet"
+                    + "&broker=" + Uri.encode(broker)
+                    + "&room=" + Uri.encode(room)
+                    + "&access=" + Uri.encode(access)
+                    + "&code=" + Uri.encode(code)
+                    + "&autoconnect=1";
+                webView.loadUrl("file:///android_asset/start.html#" + hash);
+                return;
+            }
+
+            // Compatibilidade com o modo LAN antigo.
+            String server = safe(data.getQueryParameter("server"));
+            if (!server.isEmpty() && code.matches("\\d{6}")) {
+                while (server.endsWith("/")) server = server.substring(0, server.length() - 1);
+                webView.loadUrl(server + "/?code=" + Uri.encode(code) + "&autoconnect=1");
                 return;
             }
         }
-
-        if (allowLastServer) {
-            String lastServer = prefs.getString("lastServer", "");
-            if (!lastServer.isEmpty()) {
-                webView.loadUrl(lastServer);
-                return;
-            }
-        }
-        showStart();
-    }
-
-    private void openPair(String server, String code) {
-        server = normalizeServer(server);
-        if (server.isEmpty()) {
-            Toast.makeText(this, "Endereco do Pioneer invalido.", Toast.LENGTH_LONG).show();
-            showStart();
-            return;
-        }
-        prefs.edit().putString("lastServer", server).apply();
-        webView.loadUrl(server + "/?code=" + Uri.encode(code) + "&autoconnect=1");
-    }
-
-    private String normalizeServer(String value) {
-        if (value == null) return "";
-        String s = value.trim();
-        while (s.endsWith("/")) s = s.substring(0, s.length() - 1);
-        if (!(s.startsWith("http://") || s.startsWith("https://"))) return "";
-        return s;
-    }
-
-    private void showStart() {
         webView.loadUrl("file:///android_asset/start.html");
     }
+
+    private String safe(String v) { return v == null ? "" : v.trim(); }
 
     private void hideSystemBars() {
         getWindow().getDecorView().setSystemUiVisibility(
@@ -120,6 +102,12 @@ public class MainActivity extends Activity {
     @Override
     public void onBackPressed() {
         if (webView != null && webView.canGoBack()) webView.goBack();
-        else showStart();
+        else webView.loadUrl("file:///android_asset/start.html");
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (webView != null) { webView.destroy(); webView = null; }
+        super.onDestroy();
     }
 }
