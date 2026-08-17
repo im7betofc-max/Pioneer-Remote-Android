@@ -92,7 +92,7 @@ public class MainActivity extends Activity {
 
     private void startQrScanner() {
         IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
         integrator.setPrompt("Aponte para o QR Code da aba Bluetooth do Pioneer");
         integrator.setBeepEnabled(false);
         integrator.setOrientationLocked(false);
