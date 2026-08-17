@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pioneer Remote</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 20% 10%,#30102b 0,#0d0d12 42%,#08080b 100%);color:#fff;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;padding:22px}.card{width:min(430px,100%);background:rgba(17,18,24,.96);border:1px solid #2b2c36;border-radius:28px;padding:26px;box-shadow:0 30px 90px #0009}.logo{font-size:34px;font-weight:800;font-style:italic;text-align:center}.sub{text-align:center;color:#a9abb8;margin:8px 0 26px}.step{background:#12131a;border:1px solid #272833;border-radius:18px;padding:14px 16px;margin:12px 0;line-height:1.35}.n{display:inline-grid;place-items:center;width:26px;height:26px;background:#ff0a5c;border-radius:50%;font-weight:800;margin-right:8px}.or{text-align:center;color:#777a87;margin:18px 0 10px;font-size:13px}label{font-size:12px;color:#b8bac6;display:block;margin:12px 0 7px 3px}input{width:100%;border:1px solid #343640;background:#090a0f;color:white;border-radius:14px;padding:15px;font-size:16px;outline:none}input:focus{border-color:#ff0a5c}button{width:100%;border:0;border-radius:14px;padding:15px;background:#ff0a5c;color:#fff;font-weight:800;font-size:15px;margin-top:14px}.hint{font-size:12px;color:#7f818e;text-align:center;margin-top:14px}.badge{display:table;background:#2a1022;color:#ff6ea4;border:1px solid #5d173a;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700;margin:0 auto 14px}
+</style>
+</head>
+<body>
+<div class="card">
+<div class="badge">PIONEER ANDROID</div>
+<div class="logo">Pioneer</div>
+<div class="sub">Controle do som pelo celular real</div>
+<div class="step"><span class="n">1</span>No jogo abra <b>F7 → Bluetooth</b>.</div>
+<div class="step"><span class="n">2</span>Toque em <b>Gerar novo código</b>.</div>
+<div class="step"><span class="n">3</span>Escaneie o QR. O app abre e conecta sozinho.</div>
+<div class="or">OU CONECTE MANUALMENTE</div>
+<label>IP do PC</label><input id="host" inputmode="decimal" placeholder="Ex.: 192.168.1.10">
+<label>Código de 6 dígitos</label><input id="code" inputmode="numeric" maxlength="6" placeholder="000000">
+<button onclick="go()">CONECTAR AO PIONEER</button>
+<div class="hint">PC e celular precisam estar na mesma rede Wi-Fi durante o teste.</div>
+</div>
+<script>
+function go(){var h=document.getElementById('host').value.trim().replace(/^https?:\/\//,'').replace(/\/$/,'');var c=document.getElementById('code').value.replace(/\D/g,'').slice(0,6);if(!h){alert('Digite o IP do PC.');return}if(!/:\d+$/.test(h))h+=':8787';if(c.length!==6){alert('Digite o código de 6 dígitos.');return}location.href='http://'+h+'/?code='+encodeURIComponent(c)+'&autoconnect=1'}
+</script>
+</body>
+</html>
