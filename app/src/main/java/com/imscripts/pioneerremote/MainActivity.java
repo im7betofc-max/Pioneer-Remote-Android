@@ -8,10 +8,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 public class MainActivity extends Activity {
     private WebView webView;
@@ -37,6 +42,7 @@ public class MainActivity extends Activity {
         s.setAllowFileAccess(true);
         s.setAllowContentAccess(true);
 
+        webView.addJavascriptInterface(new AndroidBridge(), "Android");
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
         hideSystemBars();
@@ -52,44 +58,82 @@ public class MainActivity extends Activity {
 
     private void handleIntent(Intent intent) {
         Uri data = intent != null ? intent.getData() : null;
-        if (data != null && "pioneer".equalsIgnoreCase(data.getScheme()) && "pair".equalsIgnoreCase(data.getHost())) {
-            String mode = safe(data.getQueryParameter("mode"));
-            String broker = safe(data.getQueryParameter("broker"));
-            String room = safe(data.getQueryParameter("room"));
-            String access = safe(data.getQueryParameter("access"));
-            String code = safe(data.getQueryParameter("code"));
-            if ("internet".equalsIgnoreCase(mode) && code.matches("\\d{6}") && !room.isEmpty() && !access.isEmpty()) {
-                String hash = "mode=internet"
+        if (openPairUri(data)) return;
+        showStart();
+    }
+
+    private boolean openPairUri(Uri data) {
+        if (data == null) return false;
+        if (!"pioneer".equalsIgnoreCase(data.getScheme()) || !"pair".equalsIgnoreCase(data.getHost())) return false;
+
+        String mode = safe(data.getQueryParameter("mode"));
+        String broker = safe(data.getQueryParameter("broker"));
+        String channel = safe(data.getQueryParameter("channel"));
+        String code = safe(data.getQueryParameter("code"));
+
+        if ("internet".equalsIgnoreCase(mode)
+                && code.matches("\\d{6}")
+                && !channel.isEmpty()) {
+            if (broker.isEmpty()) broker = "wss://broker.emqx.io:8084/mqtt";
+            String hash = "mode=internet"
                     + "&broker=" + Uri.encode(broker)
-                    + "&room=" + Uri.encode(room)
-                    + "&access=" + Uri.encode(access)
+                    + "&channel=" + Uri.encode(channel)
                     + "&code=" + Uri.encode(code)
                     + "&autoconnect=1";
-                webView.loadUrl("file:///android_asset/start.html#" + hash);
-                return;
-            }
-
-            // Compatibilidade com o modo LAN antigo.
-            String server = safe(data.getQueryParameter("server"));
-            if (!server.isEmpty() && code.matches("\\d{6}")) {
-                while (server.endsWith("/")) server = server.substring(0, server.length() - 1);
-                webView.loadUrl(server + "/?code=" + Uri.encode(code) + "&autoconnect=1");
-                return;
-            }
+            webView.loadUrl("file:///android_asset/start.html#" + hash);
+            return true;
         }
+        return false;
+    }
+
+    private void showStart() {
         webView.loadUrl("file:///android_asset/start.html");
+    }
+
+    private void startQrScanner() {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        integrator.setPrompt("Aponte para o QR Code da aba Bluetooth do Pioneer");
+        integrator.setBeepEnabled(false);
+        integrator.setOrientationLocked(false);
+        integrator.initiateScan();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            String contents = result.getContents();
+            if (contents != null && !contents.trim().isEmpty()) {
+                Uri uri;
+                try { uri = Uri.parse(contents.trim()); }
+                catch (Exception e) { uri = null; }
+                if (!openPairUri(uri)) {
+                    Toast.makeText(this, "Este QR não pertence ao Pioneer Remote.", Toast.LENGTH_LONG).show();
+                }
+            }
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private String safe(String v) { return v == null ? "" : v.trim(); }
 
+    private class AndroidBridge {
+        @JavascriptInterface
+        public void scanQr() {
+            runOnUiThread(() -> startQrScanner());
+        }
+    }
+
     private void hideSystemBars() {
         getWindow().getDecorView().setSystemUiVisibility(
-            View.SYSTEM_UI_FLAG_FULLSCREEN |
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                View.SYSTEM_UI_FLAG_FULLSCREEN |
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         );
     }
 
@@ -102,7 +146,7 @@ public class MainActivity extends Activity {
     @Override
     public void onBackPressed() {
         if (webView != null && webView.canGoBack()) webView.goBack();
-        else webView.loadUrl("file:///android_asset/start.html");
+        else showStart();
     }
 
     @Override
