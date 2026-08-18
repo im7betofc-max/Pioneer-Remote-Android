@@ -1,0 +1,1 @@
+Build de validacao Pioneer Remote v3 cloud sem BAT/Node.
