@@ -125,8 +125,6 @@ public class MainActivity extends Activity {
 
         if (code.length() != 6) return false;
         if (broker.isEmpty()) broker = DEFAULT_BROKER;
-
-        // QR antigo/alternativo sem channel: usa o canal determinístico do código.
         if (channel.isEmpty()) channel = "code-" + code;
 
         if (mode.isEmpty() || "internet".equalsIgnoreCase(mode)) {
@@ -158,6 +156,7 @@ public class MainActivity extends Activity {
             Toast.makeText(this, "Digite os 6 números do Pioneer.", Toast.LENGTH_SHORT).show();
             return;
         }
+        Toast.makeText(this, "Procurando Pioneer " + code + "...", Toast.LENGTH_SHORT).show();
         loadPairPage(DEFAULT_BROKER, "code-" + code, code);
     }
 
@@ -177,19 +176,23 @@ public class MainActivity extends Activity {
     private void installNativePairButtons() {
         if (webView == null) return;
 
-        // Não depende da ponte Android.scanQr. O clique vira uma URL interna,
-        // interceptada nativamente acima. Também faz o código manual funcionar
-        // mesmo se o JavaScript original do painel falhar em algum WebView.
+        // Captura o toque no próprio Android. Não depende do onclick original
+        // da página nem de navegação por esquema customizado do WebView.
         String js = "(function(){"
                 + "var s=document.getElementById('scanBtn');"
-                + "if(s){s.onclick=function(e){if(e)e.preventDefault();window.location.href='pioneer-scan://qr';return false;};}"
-                + "var i=document.getElementById('manualCode');"
-                + "var v=document.getElementById('pairCodeView');"
-                + "if(i){i.oninput=function(){var c=(i.value||'').replace(/\\D/g,'').slice(0,6);i.value=c;if(v)v.textContent=c||'------';};}"
+                + "if(s&&!s.dataset.nativeFixed){s.dataset.nativeFixed='1';s.addEventListener('click',function(e){"
+                + "e.preventDefault();e.stopImmediatePropagation();var old=s.textContent;s.textContent='ABRINDO CÂMERA...';"
+                + "try{if(window.Android&&typeof Android.scanQr==='function'){Android.scanQr();setTimeout(function(){s.textContent=old;},1200);return false;}}catch(x){}"
+                + "window.location.href='pioneer-scan://qr';setTimeout(function(){s.textContent=old;},1200);return false;},true);}"
+                + "var i=document.getElementById('manualCode');var v=document.getElementById('pairCodeView');"
+                + "if(i){i.addEventListener('input',function(){var c=(i.value||'').replace(/\\D/g,'').slice(0,6);i.value=c;if(v)v.textContent=c||'------';});}"
                 + "var p=document.getElementById('pairBtn');"
-                + "if(p){p.onclick=function(e){if(e)e.preventDefault();var c=i?(i.value||'').replace(/\\D/g,'').slice(0,6):'';"
-                + "if(c.length!==6){if(v)v.textContent=c||'------';return false;}"
-                + "window.location.href='pioneer-code://pair?code='+encodeURIComponent(c);return false;};}"
+                + "if(p&&!p.dataset.nativeFixed){p.dataset.nativeFixed='1';p.addEventListener('click',function(e){"
+                + "e.preventDefault();e.stopImmediatePropagation();var c=i?(i.value||'').replace(/\\D/g,'').slice(0,6):'';"
+                + "if(v)v.textContent=c||'------';if(c.length!==6){p.textContent='DIGITE OS 6 NÚMEROS';setTimeout(function(){p.textContent='CONECTAR COM O CÓDIGO';},1400);return false;}"
+                + "p.disabled=true;p.textContent='CONECTANDO...';"
+                + "try{if(window.Android&&typeof Android.pairCode==='function'){Android.pairCode(c);return false;}}catch(x){}"
+                + "window.location.href='pioneer-code://pair?code='+encodeURIComponent(c);return false;},true);}"
                 + "})();";
         webView.evaluateJavascript(js, null);
     }
@@ -269,7 +272,8 @@ public class MainActivity extends Activity {
     }
 
     private String digits6(String value) {
-        return safe(value).replaceAll("\\D", "").substring(0, Math.min(6, safe(value).replaceAll("\\D", "").length()));
+        String d = safe(value).replaceAll("\\D", "");
+        return d.substring(0, Math.min(6, d.length()));
     }
 
     private String safe(String v) {
